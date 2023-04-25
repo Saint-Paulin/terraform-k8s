@@ -1,0 +1,36 @@
+resource "proxmox_lxc" "basic" {
+  target_node  = "paulinux-proxmox"
+  hostname     = "lxc-basic"
+  #ostemplate   = "local:vztmpl/almalinux-9-default_20221108_amd64.tar.xz"
+  clone        = "100"
+  #clone_storage= "local"
+  full         = "true"
+
+  password     = "azerty"
+  unprivileged = true
+  memory       = "2048"
+  swap         = "512"
+  cpuunits     = "1024"
+  cpulimit     = "0"
+  onboot       = "true"
+  vmid         = "115"
+
+  searchdomain = "paulinux.local"
+  nameserver   = "192.168.1.252"
+  #ssh_public_keys = <<-EOT
+  #  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDAZJa0FgbRwLU2jg/UzLnuAgI7rZUbHOCj5Ye/E5ji/5Zv0d44N2IP2vZgBaiApnZtym2pQCYcqFK1e0ydFFfOUjyWag2ymXMpRVi67RdwXICvZX2iBFjso6oJ9zNwrKUwRlcsfZ/o+Dit4bjtMyPDnstGusbxpsM0AaYQoTZhBKElpQSGjkbbsrWjmKSta7qxmUjTg/z7jNIyAQfmmTTRmSAmxBF2Bc17a53oTNB5DcEUtLkcaA11aARuffFI7RFIzXNOz3M7YERclJP+oeuEE/GhkJZWIi/1UUWcRQqu0uObT8+/qa2EvjDiqu9XVVAwLZpmKQciUco6UA40DiqRmvMs3GNgWIbTNFIt/ozzokrFpftgd9S9tt8M1nPo0q73KOgeCfAekjVCW1efF0WVOO/yg4UN7cDsCGFRCFBJyf2v9DIgFFXR7LtdQXwpVrTgJ/XP3SO22fCWpQspEyv1m2tTE4KAj2Cg5zXFb6YRKJiakvADq6q6wmLaRxAnmvs
+  #  EOT
+
+  // Terraform will crash without rootfs defined
+  rootfs {
+    storage = "local"
+    size    = "8G"
+  }
+
+  network {
+    name   = "eth0"
+    bridge = "vmbr1"
+    ip     = "192.168.1.115/24"
+    gw     = "192.168.1.254"
+  }
+}
